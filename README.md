@@ -86,7 +86,16 @@ class AdminMenu extends Menu implements IsMenu
 }
 ```
 
-The `menuItems` method returns an array that defines the items in the menu. Each item is created with the `MenuItem::make` method. The `MenuItem::make` method accepts the label for the menu item and returns a `MenuItem` instance. The `link`, `icon`, `permissions`, `count`, and `active` methods are used to further configure the menu item.
+The `menuItems` method returns an array that defines the items in the menu. Each item is created with the `MenuItem::make` method. 
+The `MenuItem::make` method accepts the label for the menu item and returns a `MenuItem` instance. 
+You may use the following methods to further configure the menu item:
+- `link` - sets the link of the menu item
+- `icon` - sets the icon of the menu item
+- `permissions` - This defines a permission or an array of permissions that the user must have to see the menu item. Any of the permissions is sufficient to view the menu item.
+- `count` - sets the notification count of the menu item
+- `active` - sets the condition to check if the menu item is active
+- `hidden` - sets the condition to check if the menu item is hidden
+- `children` - sets the children of the menu item
 
 ### Customizing the Menu
 Additionally, you may define the attributes passed to the wrapping `ul` item by defining the `wrapperAttributes` method on the menu class:
