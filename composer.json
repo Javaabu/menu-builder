@@ -1,0 +1,45 @@
+{
+    "name": "javaabu/menu-builder",
+    "description": "Dynamically render your sidebar menu in admin panel",
+    "keywords": [
+        "javaabu",
+        "menu",
+        "builder"
+    ],
+    "type": "library",
+    "authors": [
+        {
+            "name": "Hussain Afeef",
+            "email": "ibnahnajjaar@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "illuminate/support": "^8.0|^9.0|^10.0|^11.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Javaabu\\MenuBuilder\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Javaabu\\MenuBuilder\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+              "Javaabu\\MenuBuilder\\MenuBuilderServiceProvider"
+            ]
+        }
+    }
+}
