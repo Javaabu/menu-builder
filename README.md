@@ -136,7 +136,13 @@ $renderChildren() // returns the HTML to render the children of the menu item
 
 This comprehensive Laravel package streamlines the process of creating custom menus while providing flexibility for your unique needs.
 
+## Credits
+- [Hussain Afeef](https://github.com/ibnnajjaar)
+- [Javaabu](https://github.com/Javaabu)
 
+
+## License
+Only for Javaabu's internal use. Not for public use.
 
 
 
