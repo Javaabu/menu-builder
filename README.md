@@ -115,7 +115,7 @@ public function getChildMenuItemView(): string
 }
 ```
 
-The following methods are available to the child menu items:
+When overriding the views, you may use the following variables in your views:
 ```php
 $getLabel() // returns the label of the menu item
 $getLink() // returns the link of the menu item
