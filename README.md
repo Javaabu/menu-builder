@@ -97,6 +97,9 @@ You may use the following methods to further configure the menu item:
 - `hidden` - sets the condition to check if the menu item is hidden
 - `children` - sets the children of the menu item
 
+Almost all of the above methods accept a callback function that returns the value of the method. This is useful when you want to calculate the value of the method dynamically.
+
+
 ### Customizing the Menu
 Additionally, you may define the attributes passed to the wrapping `ul` item by defining the `wrapperAttributes` method on the menu class:
 
