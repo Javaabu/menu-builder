@@ -2,15 +2,19 @@
 
 namespace Javaabu\MenuBuilder;
 
-use Javaabu\Sidebar\Sidebar;
 use Illuminate\Support\ServiceProvider;
 
 class MenuBuilderServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../resources/views' => resource_path('views/vendor/menu-builder'),
+            ], 'menu-builder-views');
+        }
+
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'menu-builder');
-        $this->registerPublishables();
     }
 
     public function register(): void
@@ -20,10 +24,5 @@ class MenuBuilderServiceProvider extends ServiceProvider
         });
 
         require_once __DIR__ . '/helpers.php';
-    }
-
-    private function registerPublishables(): void
-    {
-        $this->mergeConfigFrom(__DIR__ . '/../config/menu-builder.php', 'menu_builder');
     }
 }

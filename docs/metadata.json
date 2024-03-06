@@ -1,0 +1,5 @@
+{
+    "name": "Menu Builder",
+    "description": "This Laravel package makes it breeze to set up and render menus for different parts of your application.",
+    "version": "1"
+}
