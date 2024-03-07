@@ -81,7 +81,7 @@ If you call both `permissions` and `can`, then the conditions defined in both me
 You may use the following methods to further configure the menu item:
 - `icon` - sets the icon of the menu item
 - `count` - sets the notification count of the menu item. The method can accept an int, closure or even an eloquent `Builder` instance. You can specify the permissions required to show the count using the 2nd argument of this method.
-- `children` - sets the children of the menu item
+- `children` - sets the children of the menu item. Note that the default views support only 2 levels of items. If you want more levels or infinite levels, you can supply your own view when rendering the menu.
 
 ### Displaying a Menu
 
