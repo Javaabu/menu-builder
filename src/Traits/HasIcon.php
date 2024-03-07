@@ -22,6 +22,6 @@ trait HasIcon
 
     public function hasIcon(): bool
     {
-        return ! is_null($this->getIcon());
+        return ! empty($this->getIcon());
     }
 }

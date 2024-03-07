@@ -1,12 +1,12 @@
 <ul class="navigation">
     <li class="navigation__active">
         <a href="http://localhost">
-            <i class="zmdi zmdi-view-quilt"></i> Dashboard
+            <span><i class="zmdi zmdi-view-quilt"></i> Dashboard</span>
         </a>
     </li>
     <li class="navigation__sub">
         <a href="">
-            <i class="zmdi zmdi-shopping-cart"></i> Products
+            <span><i class="zmdi zmdi-shopping-cart"></i> Products</span>
             <span class="ml-2 badge badge-pill">21</span>
         </a>
         <ul>
@@ -30,7 +30,7 @@
     </li>
     <li>
         <a href="http://localhost/returns">
-            <i class="zmdi zmdi-assignment-return"></i> Returns
+            <span><i class="zmdi zmdi-assignment-return"></i> Returns</span>
         </a>
     </li>
 </ul>

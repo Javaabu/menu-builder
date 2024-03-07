@@ -8,9 +8,11 @@ use Javaabu\MenuBuilder\Menu\MenuItem;
 trait CanHaveChildren
 {
     protected array $children = [];
+    protected ?array $visible_children;
 
     public function children(array $children): self
     {
+        $this->visible_children = null;
         $this->children = $children;
 
         return $this;
@@ -26,20 +28,31 @@ trait CanHaveChildren
         return ! empty($this->getChildren());
     }
 
-    public function hasActiveChild(): bool
+    public function hasActiveChild(?Authorizable $user = null): bool
     {
-        return collect($this->getChildren())
+        return collect($this->getVisibleChildren($user))
                     ->contains(function (MenuItem $child) {
                         return $child->isActive() || $child->hasActiveChild();
                     });
     }
 
+    public function getVisibleChildren(?Authorizable $user = null): array
+    {
+        if (isset($this->visible_children)) {
+            return $this->visible_children;
+        }
+
+        return $this->visible_children =
+            collect($this->getChildren())
+                ->filter(function (MenuItem $item) use ($user) {
+                    return $item->canView($user);
+                })
+                ->all();
+    }
+
     public function hasVisibleChild(?Authorizable $user = null): bool
     {
-        return collect($this->getChildren())
-            ->contains(function (MenuItem $child) use ($user) {
-                return $child->canView($user) || $child->hasVisibleChild($user);
-            });
+        return ! empty($this->getVisibleChildren($user));
     }
 
     public function getAggregatedCount(?Authorizable $user = null): int

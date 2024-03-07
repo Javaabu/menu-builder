@@ -10,9 +10,11 @@ trait HasCount
 {
     protected Closure | Builder | int $count = 0;
     protected Closure | array $count_permissions = [];
+    protected ?int $cached_count;
 
     public function count(Closure | Builder | int $count, Closure | array | string $count_permissions = []): self
     {
+        $this->cached_count = null;
         $this->count = $count;
         $this->count_permissions = is_string($count_permissions) ? [$count_permissions] : $count_permissions;
 
@@ -40,13 +42,17 @@ trait HasCount
 
     public function getCount(?Authorizable $user = null): int
     {
-        if ($this->count instanceof Builder) {
-            return $this->count->count();
-        } elseif ($this->count instanceof Closure) {
-            return $this->evaluate($this->count, compact('user'));
+        if (isset($this->cached_count)) {
+            return $this->cached_count;
         }
 
-        return $this->count;
+        if ($this->count instanceof Builder) {
+            return $this->cached_count = $this->count->count();
+        } elseif ($this->count instanceof Closure) {
+            return $this->cached_count = $this->evaluate($this->count, compact('user'));
+        }
+
+        return $this->cached_count = $this->count;
     }
 
     public function shouldShowCount(?Authorizable $user = null): bool

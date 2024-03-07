@@ -23,6 +23,11 @@ abstract class TestCase extends BaseTestCase
 
     }
 
+    protected function loadTestStub($stub): string
+    {
+        return file_get_contents(__DIR__ . '/stubs/' . $stub);
+    }
+
     protected function getPackageProviders($app)
     {
         return [

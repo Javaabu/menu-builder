@@ -14,44 +14,11 @@ You can install the package via composer:
 composer require javaabu/menu-builder
 ```
 
-To publish the config file to config/menu-builder.php run:
-
-```bash
-php artisan vendor:publish --provider="Javaabu\MenuBuilder\MenuBuilderServiceProvider" --tag="config"
-```
-
 ## Usage
-To configure your menus, you add them to an array in the package's configuration file. Each array key represents a menu identifier, and each corresponding value is the fully qualified name of a `Menu` class that tells Menu Builder how to render that menu.
-
-Here is an example configuration:
-
-```php
-<?php
-// config/menu-builder.php
-return [
-    'menus' => [
-        'admin' => \App\Helpers\Sidebar\AdminMenu::class,
-        'public' => \App\Helpers\Sidebar\PublicMenu::class,
-    ],
-];
-```
-
-In this example, two menus are defined: 'admin' and 'public'. `\App\Helpers\Sidebar\AdminMenu` and `\App\Helpers\Sidebar\PublicMenu` are Menu classes that tell Menu Builder how to render the 'admin' and 'public' menus, respectively.
-
-### Displaying a Menu
-
-After you have defined a menu in the configuration file, you can display it in a view file with the `menu_builder()` helper function. This function takes a menu identifier (i.e. 'admin', 'public') as an argument and returns the HTML to render the menu.
-
-Here's a sample code to display a menu:
-
-```php
-{!! menu_builder()->render('public') !!}
-```
-The above code will render the 'public' menu.
 
 ### Defining a Menu
 
-Each menu is defined by a class that extends `Javaabu\MenuBuilder\Menu\Menu` and implementes the `Javaabu\MenuBuilder\Contracts\IsMenu` interface. 
+Each menu is defined by a class that extends `Javaabu\MenuBuilder\Menu\Menu`.
 Those classes must define `menuItems()` method.
 
 Here is an example menu class:
@@ -59,102 +26,144 @@ Here is an example menu class:
 ```php
 <?php
 
-namespace App\Helpers\Sidebar;
+namespace App\Menus;
 
-use App\Http\Controllers\Admin\ApplicationsController;use Javaabu\MenuBuilder\Contracts\IsMenu;use Javaabu\MenuBuilder\Menu\Menu;use Javaabu\MenuBuilder\Menu\MenuItem;use Javaabu\MenuBuilder\Support\ChildMenuItem;
+use Javaabu\MenuBuilder\Menu\Menu;
+use Javaabu\MenuBuilder\Menu\MenuItem;
 
-class AdminMenu extends Menu implements IsMenu
+class AdminSidebar extends Menu implements IsMenu
 {
+    protected string $icon_prefix = 'zmdi zmdi-';
+    protected ?string $guard = 'web_admin';
+
     public function menuItems(): array
     {
         return [
             MenuItem::make(__('Dashboard'))
-                    ->link(route('admin.home'))
-                    ->icon('fa-duotone fa-tachometer-alt')
-                    ->active(request()->routeIs('admin.home')),
+                    ->route('admin.home')
+                    ->icon('zmdi-view-quilt'),
+                    
+            MenuItem::make(__('Users'))
+                ->controller(\App\Http\Controllers\Admin\UsersController::class)
+                ->can('viewAny', \App\Models\User::class)
+                ->icon('zmdi-accounts')
+                ->count(App\Models\User::userVisible()->pending(), 'approve_users'),
 
-            MenuItem::make(__('Applications'))
-                    ->link(route('admin.applications.index'))
-                    ->icon('fa-duotone fa-file-invoice')
-                    ->permissions(\App\Models\ApplicationType::getViewPermissionList())
-                    ->count(function () {
-                        return \App\Models\Application::pending()->count();
-                    })
-                    ->active(request()->routeIs('admin.applications.*')),
+            MenuItem::make(__('Roles'))
+                ->url('/roles?foo=bars')
+                ->permissions('view_roles')
+                ->active(function (Request $request) {
+                    return $request->query('foo') == 'bars';
+                }),
         ];
     }
 }
 ```
+The `$icon_prefix` is an optional property you can set to give a prefix to icons of all the menu items.
+The `$guard` is an optional property you can set to specify the guard used to find the current user.
+The `menuItems` method returns an array that defines the items in the menu. Each item is created with the `MenuItem::make` method.
+The `MenuItem::make` method accepts the label for the menu item and returns a `MenuItem` instance.
 
-The `menuItems` method returns an array that defines the items in the menu. Each item is created with the `MenuItem::make` method. 
-The `MenuItem::make` method accepts the label for the menu item and returns a `MenuItem` instance. 
-You may use the following methods to further configure the menu item:
-- `link` - sets the link of the menu item
-- `icon` - sets the icon of the menu item
+You may use any of the following methods to set the link of the menu item. The link would be generated using the last called method:
+- `route` - sets the link using the `route()` helper. The active state would be automatically determined using the given route.
+- `controller` - sets the link using the `index` action of the given controller. The active state would be true if the current controller is the given controller.
+- `url` - sets the link directly using a string. The active state would be true if the current full url matches the given url.
+
+When the link is set using any of the above methods, the active state will be determined automatically. If you want to customize the active state logic, you can use the following method:
+- `active` - sets the condition to check if the menu item is active. Accepts a boolean or a closure.
+
+You may use any of the following methods to set the conditions to determine whether to show the item to the current user:
 - `permissions` - This defines a permission or an array of permissions that the user must have to see the menu item. Any of the permissions is sufficient to view the menu item.
-- `count` - sets the notification count of the menu item
-- `active` - sets the condition to check if the menu item is active
-- `hidden` - sets the condition to check if the menu item is hidden
+- `can` - This defines the required permissions the user must have to see the menu item using the `can` helper. This method also accepts a closure.
+
+If you call both `permissions` and `can`, then the conditions defined in both methods should be met to show the item
+
+You may use the following methods to further configure the menu item:
+- `icon` - sets the icon of the menu item
+- `count` - sets the notification count of the menu item. The method can accept an int, closure or even an eloquent `Builder` instance. You can specify the permissions required to show the count using the 2nd argument of this method.
 - `children` - sets the children of the menu item
 
-Almost all of the above methods accept a callback function that returns the value of the method. This is useful when you want to calculate the value of the method dynamically.
+### Displaying a Menu
 
+After you have defined a menu class, you can display it in a view file by calling the `links()` method.
 
-### Customizing the Menu
-Additionally, you may define the attributes passed to the wrapping `ul` item by defining the `wrapperAttributes` method on the menu class:
+Here's a sample code to display a menu:
 
 ```php
-public function wrapperAttributes(): array
+$sidebar = new \App\Menus\AdminSidebar();
+
+{!! $sidebar->links() !!}
+```
+
+When displaying the menu, you can use the following methods to further customize how the menu is displayed:
+`iconPrefix` = sets the icon prefix used by all the menu items
+`guard` - sets the guard used to find the current user
+
+### Changing the CSS Framework
+
+By default, the menu would be rendered as a Bootstrap 5 menu. The package support Bootstrap 5 and Material Admin 2.6 CSS frameworks. To change the framework used, you can call any of the following methods:
+
+```php
+// render as Bootstrap 5
+{!! $sidebar->useBootstrap5()->links() !!}
+
+// render as Material Admin 2.6
+{!! $sidebar->useMaterialAdmin26()->links() !!}
+```
+
+You can also change the default framework by calling the `MenuBuilder`'s `useBootstrap5` and `useMaterialAdmin26` methods within the `boot` method of your `App\Providers\AppServiceProvider` class.
+
+```php
+use Javaabu\MenuBuilder\MenuBuilder;
+ 
+/**
+ * Bootstrap any application services.
+ */
+public function boot(): void
 {
-    return [
-        'id'    => 'sidebar-links',
-        'class' => 'navigation'
-    ];
+    MenuBuilder::useBootstrap5();
+    MenuBuilder::useMaterialAdmin26();
 }
 ```
 
-You may also override the views used to render the menu items and child menu items by defining the `getMenuItemView` and `getChildMenuItemView` methods on the menu class:
+### Customizing the rendered menu
 
+The `links` method will accept your own view if you want to render the menu on your own. The view will receive the following date:
+`$items` - Array of root level menu items visible to the current user
+`$user` - Current user
+`$icon_prefix` - Prefix to use for the items' icons
+
+The following methods will be available for the menu items:
 ```php
-public function getMenuItemView(): string
-{
-    return "vendor/sidebar/bootstrap-five/menu-item";
-}
+$item->getLink() // returns the link of the item
+$item->getLabel() // returns the label of the item
+$item->isActive() // checks if the item is currently active
+$item->hasActiveChild($user) // checks if the item has any visible child that is currently active
+$item->hasIcon() // checks if the item has an icon defined
+$item->getIcon($icon_prefix) // returns the item's icon with the prefix prepended
+$item->getAggregatedCount($user) // get the count of the item + the count of all visible child items, will return 0 if the current user can't see the count
+$item->getVisibleCount($user) // get the count of the item, will return 0 if the current user can't see the count
+$item->getVisibleChildren($user) // returns an array of all visible child items
 
-public function getChildMenuItemView(): string
-{
-    return "vendor/sidebar/bootstrap-five/child-menu-item";
-}
 ```
 
-When overriding the views, you may use the following methods in your views:
-```php
-$getLabel() // returns the label of the menu item
-$getLink() // returns the link of the menu item
-$hasPermissionToSee() // returns true if the user has permission to see the menu item
-$hasCount() // returns true if the menu item has a count
-$getCount() // returns the count of the menu item
-$isActive() // returns true if the menu item is active
-$isHidden() // returns true if the menu item is hidden
-```
-In addition to the above methods, the following methods are available to the parent menu items:
-```php
-$hasIcon() // returns true if the menu item has an icon
-$getIcon() // returns the icon of the menu item
-$hasChildren() // returns true if the menu item has children
-$hasActiveChild() // returns true if the menu item has an active child
-$renderChildren() // returns the HTML to render the children of the menu item
+If you want to customize the default views, you can publish the package views and customize them. To publish the view files to `resources/views/vendor/menu-builder`, run:
+
+```bash
+php artisan vendor:publish --provider="Javaabu\MenuBuilder\MenuBuilderServiceProvider" --tag="menu-builder-views"
 ```
 
 This comprehensive Laravel package streamlines the process of creating custom menus while providing flexibility for your unique needs.
 
 ## Credits
 - [Hussain Afeef](https://github.com/ibnnajjaar)
+- [Arushad Ahmed (@dash8x)](http://arushad.com)
 - [Javaabu](https://github.com/Javaabu)
-
+- [All Contributors](../../contributors)
 
 ## License
-Only for Javaabu's internal use. Not for public use.
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
 
 

@@ -28,9 +28,6 @@ class MenuItem
     use CanHaveChildren;
     use Macroable;
 
-    use \Javaabu\MenuBuilder\Traits\HasView;
-
-
     protected string $label;
 
 
@@ -76,7 +73,7 @@ class MenuItem
             return $this->generateControllerLink();
         }
 
-        return '#';
+        return '';
     }
 
     public function canView(?Authorizable $user = null): bool
