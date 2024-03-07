@@ -6,17 +6,18 @@ use Closure;
 
 trait HasIcon
 {
-    public Closure | string | null $icon = null;
+    protected Closure | string | null $icon = null;
 
     public function icon(Closure | string | null $icon): self
     {
         $this->icon = $icon;
+
         return $this;
     }
 
-    public function getIcon(): string | null
+    public function getIcon($prefix = ''): ?string
     {
-        return $this->evaluate($this->icon);
+        return $prefix . $this->evaluate($this->icon);
     }
 
     public function hasIcon(): bool

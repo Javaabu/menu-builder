@@ -3,11 +3,13 @@
 namespace Javaabu\MenuBuilder\Tests\Unit;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Javaabu\MenuBuilder\Tests\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 use Javaabu\MenuBuilder\Tests\InteractsWithDatabase;
 use Javaabu\MenuBuilder\Menu\MenuItem;
 use Javaabu\MenuBuilder\Tests\Models\User;
+use Javaabu\MenuBuilder\Tests\Policies\UserPolicy;
 use Javaabu\MenuBuilder\Tests\TestCase;
 
 class MenuItemTest extends TestCase
@@ -182,5 +184,90 @@ class MenuItemTest extends TestCase
             ->seeElement('a[href="http://localhost/home?foo=bar"].active')
             ->seeElement('a[href="http://localhost/home?foo=baz"]')
             ->dontSeeElement('a[href="http://localhost/home?foo=baz"].active');
+    }
+
+    /** @test */
+    public function it_can_set_the_menu_item_icon(): void
+    {
+        $menu_item = MenuItem::make('Dashboard')->icon('book');
+
+        $this->assertEquals('zmdi zmdi-book', $menu_item->getIcon('zmdi zmdi-'));
+    }
+
+    /** @test */
+    public function it_can_set_the_menu_item_permissions(): void
+    {
+        $this->assertEquals(['view_users'], MenuItem::make('Users')->permissions('view_users')->getPermissions());
+        $this->assertEquals(['view_users', 'edit_users'], MenuItem::make('Users')->permissions('view_users', 'edit_users')->getPermissions());
+        $this->assertEquals(['view_users', 'edit_users'], MenuItem::make('Users')->permissions(['view_users', 'edit_users'])->getPermissions());
+    }
+
+    /** @test */
+    public function it_can_determine_if_a_user_can_view_the_menu_item_using_permissions(): void
+    {
+        Gate::define('view_users', function (User $user) {
+            return $user->name == 'John';
+        });
+
+        Gate::define('edit_users', function (User $user) {
+            return $user->name != 'John';
+        });
+
+        /** @var User $user */
+        $user = User::factory() ->create(['name' => 'John']);
+
+        // sanity check
+        $this->assertTrue($user->can('view_users'));
+        $this->assertFalse($user->can('edit_users'));
+
+        $this->assertTrue(MenuItem::make('Users')->canView());
+        $this->assertTrue(MenuItem::make('Users')->canView($user));
+        $this->assertTrue(MenuItem::make('Users')->permissions('view_users')->canView($user));
+        $this->assertTrue(MenuItem::make('Users')->permissions('view_users', 'edit_users')->canView($user));
+
+        $this->assertFalse(MenuItem::make('Users')->permissions('view_users')->canView());
+        $this->assertFalse(MenuItem::make('Users')->permissions('edit_users')->canView($user));
+    }
+
+    /** @test */
+    public function it_can_determine_if_a_user_can_view_the_menu_item_using_can(): void
+    {
+        Gate::policy(User::class, UserPolicy::class);
+
+        /** @var User $user */
+        $user = User::factory() ->create(['name' => 'John']);
+        $other_user = User::factory() ->create(['name' => 'Doe']);
+
+        // sanity check
+        $this->assertTrue($user->can('viewAny', User::class));
+        $this->assertTrue($user->can('update', $user));
+        $this->assertFalse($user->can('update', $other_user));
+
+        $this->assertTrue(MenuItem::make('Users')->can('viewAny', User::class)->canView($user));
+        $this->assertTrue(MenuItem::make('Users')->can('update', $user)->canView($user));
+        $this->assertTrue(MenuItem::make('Users')->can(function ($user) { return $user->name == 'John';})->canView($user));
+
+        $this->assertFalse(MenuItem::make('Users')->can('update', $other_user)->canView());
+        $this->assertFalse(MenuItem::make('Users')->can(function ($user) { return $user->name != 'John';})->canView($user));
+    }
+
+    /** @test */
+    public function it_can_determine_if_a_user_can_view_the_menu_item_using_both_can_and_permssions(): void
+    {
+        Gate::policy(User::class, UserPolicy::class);
+
+        Gate::define('view_users', function (User $user) {
+            return $user->name == 'John';
+        });
+
+        Gate::define('edit_users', function (User $user) {
+            return $user->name != 'John';
+        });
+
+        /** @var User $user */
+        $user = User::factory() ->create(['name' => 'John']);
+
+        $this->assertFalse(MenuItem::make('Users')->can('viewAny', User::class)->permissions('edit_users')->canView($user));
+        $this->assertTrue(MenuItem::make('Users')->can('viewAny', User::class)->permissions('view_users')->canView($user));
     }
 }

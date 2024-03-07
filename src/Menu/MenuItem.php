@@ -3,9 +3,13 @@
 namespace Javaabu\MenuBuilder\Menu;
 
 use Closure;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 use Illuminate\Support\Traits\Macroable;
 use Javaabu\MenuBuilder\Traits\CanActivate;
+use Javaabu\MenuBuilder\Traits\HasCan;
 use Javaabu\MenuBuilder\Traits\HasController;
+use Javaabu\MenuBuilder\Traits\HasIcon;
+use Javaabu\MenuBuilder\Traits\HasPermission;
 use Javaabu\MenuBuilder\Traits\HasRoute;
 use Javaabu\MenuBuilder\Traits\HasUrl;
 
@@ -15,11 +19,13 @@ class MenuItem
     use HasController;
     use HasUrl;
     use CanActivate;
+    use HasIcon;
+    use HasPermission;
+    use HasCan;
 
     use \Javaabu\MenuBuilder\Traits\HasView;
 
-    use \Javaabu\MenuBuilder\Traits\HasIcon;
-    use \Javaabu\MenuBuilder\Traits\HasPermission;
+
     use \Javaabu\MenuBuilder\Traits\HasCount;
 
     use \Javaabu\MenuBuilder\Traits\CanHaveChildren;
@@ -72,5 +78,10 @@ class MenuItem
         }
 
         return '#';
+    }
+
+    public function canView(?Authorizable $user = null): bool
+    {
+        return $this->hasAnyPermission($user) && $this->userCanViewWithCan($user);
     }
 }

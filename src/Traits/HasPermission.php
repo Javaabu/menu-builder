@@ -2,25 +2,39 @@
 
 namespace Javaabu\MenuBuilder\Traits;
 
-use Closure;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 trait HasPermission
 {
-    public Closure | array $permissions = [];
+    protected array $permissions = [];
 
-    public function permissions(Closure | array | string $permission): self
+    public function permissions(array | string $permissions): self
     {
-        $this->permissions = is_string($permission) ? [$permission] : $permission;
+        $this->permissions = is_array($permissions) ? $permissions : func_get_args();
         return $this;
     }
 
     public function getPermissions(): array
     {
-        return $this->evaluate($this->permissions);
+        return $this->permissions;
     }
 
-    public function hasPermissionToSee(): bool
+    protected function hasPermissions(): bool
     {
-        return auth()->user() && auth()->user()->canAny($this->getPermissions());
+        return ! empty($this->getPermissions());
+    }
+
+    protected function hasAnyPermission(?Authorizable $user = null): bool
+    {
+        if ($this->hasPermissions()) {
+
+            if (! $user) {
+                return false;
+            }
+
+            return $user->canAny($this->getPermissions());
+        }
+
+        return true;
     }
 }
