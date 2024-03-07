@@ -2,8 +2,6 @@
 
 namespace Javaabu\MenuBuilder\Menu;
 
-use Javaabu\MenuBuilder\Support\MenuItem;
-use App\Http\Controllers\Admin\ApplicationsController;
 
 class Menu
 {

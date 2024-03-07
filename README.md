@@ -61,11 +61,7 @@ Here is an example menu class:
 
 namespace App\Helpers\Sidebar;
 
-use Javaabu\MenuBuilder\Menu\Menu;
-use Javaabu\MenuBuilder\Support\MenuItem;
-use Javaabu\MenuBuilder\Contracts\IsMenu;
-use Javaabu\MenuBuilder\Support\ChildMenuItem;
-use App\Http\Controllers\Admin\ApplicationsController;
+use App\Http\Controllers\Admin\ApplicationsController;use Javaabu\MenuBuilder\Contracts\IsMenu;use Javaabu\MenuBuilder\Menu\Menu;use Javaabu\MenuBuilder\Menu\MenuItem;use Javaabu\MenuBuilder\Support\ChildMenuItem;
 
 class AdminMenu extends Menu implements IsMenu
 {

@@ -1,9 +1,8 @@
 <?php
 
-namespace Javaabu\MenuBuilder\Support\Traits;
+namespace Javaabu\MenuBuilder\Traits;
 
 use Closure;
-use Exception;
 use Illuminate\View\View;
 use Javaabu\Paperless\Support\Components\Component;
 

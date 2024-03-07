@@ -2,9 +2,9 @@
 
 namespace Javaabu\MenuBuilder;
 
-use Javaabu\MenuBuilder\Support\MenuItem;
-use Javaabu\MenuBuilder\Contracts\IsMenu;
 use Illuminate\Support\Traits\Macroable;
+use Javaabu\MenuBuilder\Contracts\IsMenu;
+use Javaabu\MenuBuilder\Menu\MenuItem;
 
 class MenuBuilder
 {

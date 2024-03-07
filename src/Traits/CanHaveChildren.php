@@ -1,6 +1,6 @@
 <?php
 
-namespace Javaabu\MenuBuilder\Support\Traits;
+namespace Javaabu\MenuBuilder\Traits;
 
 use Closure;
 use Javaabu\MenuBuilder\Support\ChildMenuItem;
