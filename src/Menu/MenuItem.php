@@ -6,8 +6,10 @@ use Closure;
 use Illuminate\Contracts\Auth\Access\Authorizable;
 use Illuminate\Support\Traits\Macroable;
 use Javaabu\MenuBuilder\Traits\CanActivate;
+use Javaabu\MenuBuilder\Traits\CanHaveChildren;
 use Javaabu\MenuBuilder\Traits\HasCan;
 use Javaabu\MenuBuilder\Traits\HasController;
+use Javaabu\MenuBuilder\Traits\HasCount;
 use Javaabu\MenuBuilder\Traits\HasIcon;
 use Javaabu\MenuBuilder\Traits\HasPermission;
 use Javaabu\MenuBuilder\Traits\HasRoute;
@@ -22,15 +24,12 @@ class MenuItem
     use HasIcon;
     use HasPermission;
     use HasCan;
+    use HasCount;
+    use CanHaveChildren;
+    use Macroable;
 
     use \Javaabu\MenuBuilder\Traits\HasView;
 
-
-    use \Javaabu\MenuBuilder\Traits\HasCount;
-
-    use \Javaabu\MenuBuilder\Traits\CanHaveChildren;
-    use \Javaabu\MenuBuilder\Traits\CanBeHidden;
-    use Macroable;
 
     protected string $label;
 

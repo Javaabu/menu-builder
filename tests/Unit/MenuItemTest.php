@@ -270,4 +270,87 @@ class MenuItemTest extends TestCase
         $this->assertFalse(MenuItem::make('Users')->can('viewAny', User::class)->permissions('edit_users')->canView($user));
         $this->assertTrue(MenuItem::make('Users')->can('viewAny', User::class)->permissions('view_users')->canView($user));
     }
+
+    /** @test */
+    public function it_can_set_the_menu_item_count(): void
+    {
+        /** @var User $user */
+        $user = User::factory() ->create(['name' => 'John']);
+        $other_user = User::factory() ->create(['name' => 'Doe']);
+
+        $this->assertEquals(12, MenuItem::make('Users')->count(12)->getCount());
+        $this->assertEquals(2, MenuItem::make('Users')->count(User::query())->getCount());
+        $this->assertEquals(3, MenuItem::make('Users')->count(function ($user) { return 1 + 2;})->getCount());
+    }
+
+    /** @test */
+    public function it_can_determine_whether_to_show_the_menu_item_count(): void
+    {
+        Gate::define('view_users', function (User $user) {
+            return $user->name == 'John';
+        });
+
+        Gate::define('edit_users', function (User $user) {
+            return $user->name != 'John';
+        });
+
+        /** @var User $user */
+        $user = User::factory() ->create(['name' => 'John']);
+        $other_user = User::factory() ->create(['name' => 'Doe']);
+
+        $this->assertTrue(MenuItem::make('Users')->count(12)->shouldShowCount());
+
+        $this->assertTrue(MenuItem::make('Users')->count(12, 'view_users')->shouldShowCount($user));
+        $this->assertTrue(MenuItem::make('Users')->count(User::query(), ['view_users', 'edit_users'])->shouldShowCount($user));
+        $this->assertTrue(MenuItem::make('Users')->count(function ($user) { return 1 + 2;}, function ($user) { return $user->name == 'John';})->shouldShowCount($user));
+
+        $this->assertFalse(MenuItem::make('Users')->count(12, 'view_users')->shouldShowCount());
+        $this->assertFalse(MenuItem::make('Users')->count(User::query(), ['edit_users'])->shouldShowCount($user));
+        $this->assertFalse(MenuItem::make('Users')->count(function ($user) { return 1 + 2;}, function ($user) { return $user->name != 'John';})->shouldShowCount($user));
+    }
+
+    /** @test */
+    public function it_can_set_the_menu_item_children(): void
+    {
+        Gate::define('view_users', function (User $user) {
+            return $user->name == 'John';
+        });
+
+        Gate::define('edit_users', function (User $user) {
+            return $user->name != 'John';
+        });
+
+        $children = [
+            MenuItem::make('Child 1')->count(1, 'view_users')->permissions('view_users'),
+            MenuItem::make('Child 2')->count(2, 'edit_users')->permissions('edit_users'),
+            MenuItem::make('Child 3')->active(true),
+        ];
+
+        $other_children = [
+            MenuItem::make('Child 1')->count(1, 'edit_users')->permissions('edit_users'),
+            MenuItem::make('Child 2')->count(2, 'edit_users')->permissions('edit_users'),
+        ];
+
+        $main_item = MenuItem::make('Main Item')
+                        ->count(1)
+                        ->children($children);
+
+        $other_main_item = MenuItem::make('Main Item')
+            ->count(1)
+            ->children($other_children);
+
+        /** @var User $user */
+        $user = User::factory() ->create(['name' => 'John']);
+
+        $this->assertTrue($main_item->hasChildren());
+        $this->assertEquals($children, $main_item->getChildren());
+        $this->assertTrue($main_item->hasVisibleChild($user));
+        $this->assertTrue($main_item->hasActiveChild());
+        $this->assertEquals(2, $main_item->getAggregatedCount($user));
+
+        $this->assertTrue($other_main_item->hasChildren());
+        $this->assertFalse($other_main_item->hasVisibleChild($user));
+        $this->assertFalse($other_main_item->hasActiveChild());
+        $this->assertEquals(1, $other_main_item->getAggregatedCount($user));
+    }
 }

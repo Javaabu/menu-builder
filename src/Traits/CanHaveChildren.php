@@ -2,56 +2,52 @@
 
 namespace Javaabu\MenuBuilder\Traits;
 
-use Closure;
-use Javaabu\MenuBuilder\Support\ChildMenuItem;
+use Illuminate\Contracts\Auth\Access\Authorizable;
+use Javaabu\MenuBuilder\Menu\MenuItem;
 
 trait CanHaveChildren
 {
-    public array $children = [];
-    protected string | Closure | null $childView = null;
+    protected array $children = [];
 
     public function children(array $children): self
     {
         $this->children = $children;
+
         return $this;
     }
 
     public function getChildren(): array
     {
-        return $this->evaluate($this->children);
+        return $this->children;
     }
 
     public function hasChildren(): bool
     {
-        return count($this->getChildren()) > 0;
+        return ! empty($this->getChildren());
     }
 
     public function hasActiveChild(): bool
     {
-        return collect($this->getChildren())->contains(fn ($child) => $child->isActive());
+        return collect($this->getChildren())
+                    ->contains(function (MenuItem $child) {
+                        return $child->isActive() || $child->hasActiveChild();
+                    });
     }
 
-    public function setChildView(string | Closure | null $view): static
+    public function hasVisibleChild(?Authorizable $user = null): bool
     {
-        $this->childView = $view;
-        return $this;
+        return collect($this->getChildren())
+            ->contains(function (MenuItem $child) use ($user) {
+                return $child->canView($user) || $child->hasVisibleChild($user);
+            });
     }
 
-    public function getChildView(): ?string
+    public function getAggregatedCount(?Authorizable $user = null): int
     {
-        return $this->evaluate($this->childView);
-    }
-
-    public function renderChildren(): string
-    {
-        $html = "<ul>";
-        foreach ($this->getChildren() as $child) {
-            /* @var ChildMenuItem $child */
-            $html .= $child->setView($this->getChildView())
-                           ->toHtml();
-        }
-
-        $html .= "</ul>";
-        return $html;
+        return $this->getVisibleCount($user) +
+            collect($this->getChildren())
+                ->sum(function (MenuItem $child) use ($user) {
+                    return $child->getAggregatedCount($user);
+                });
     }
 }
