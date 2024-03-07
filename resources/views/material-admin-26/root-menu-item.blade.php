@@ -9,12 +9,7 @@
         ])
     @endif
     >
-    <a href="{{ $item->getLink() }}">
-        <span>@if($item->hasIcon())<i class="{{ $item->getIcon($icon_prefix) }}"></i> @endif{{ $item->getLabel() }}</span>
-        @if($count = $item->getAggregatedCount($user))
-        <span class="ml-2 badge badge-pill">{{ $count }}</span>
-        @endif
-    </a>
+    <a href="{{ $item->getLink() }}">@if($item->hasIcon())<i class="{{ $item->getIcon($icon_prefix) }}"></i> @endif{{ $item->getLabel() }}@if($count = $item->getAggregatedCount($user))<span class="ml-2 badge badge-pill">{{ $count }}</span>@endif</a>
     @if($children = $item->getVisibleChildren($user))
     <ul>
         @foreach($children as $child)
