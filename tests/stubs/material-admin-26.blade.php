@@ -1,4 +1,4 @@
-<ul class="navigation">
+<ul class="navigation" id="side-bar">
     <li class="navigation__active">
         <a href="http://localhost"><i class="zmdi zmdi-view-quilt"></i> Dashboard</a>
     </li>

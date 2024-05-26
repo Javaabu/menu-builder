@@ -33,6 +33,7 @@ use Javaabu\MenuBuilder\Menu\MenuItem;
 
 class AdminSidebar extends Menu implements IsMenu
 {
+    protected string $id = 'side-bar';
     protected string $icon_prefix = 'zmdi zmdi-';
     protected ?string $guard = 'web_admin';
 
@@ -59,6 +60,7 @@ class AdminSidebar extends Menu implements IsMenu
     }
 }
 ```
+The `$id` is an optional property you can set to give an id to the menu.
 The `$icon_prefix` is an optional property you can set to give a prefix to icons of all the menu items.
 The `$guard` is an optional property you can set to specify the guard used to find the current user.
 The `menuItems` method returns an array that defines the items in the menu. Each item is created with the `MenuItem::make` method.
@@ -96,8 +98,9 @@ $sidebar = new \App\Menus\AdminSidebar();
 ```
 
 When displaying the menu, you can use the following methods to further customize how the menu is displayed:
-`iconPrefix` = sets the icon prefix used by all the menu items
+`iconPrefix` - sets the icon prefix used by all the menu items
 `guard` - sets the guard used to find the current user
+`id` - sets the css id of the menu
 
 ### Changing the CSS Framework
 
@@ -132,6 +135,7 @@ The `links` method will accept your own view if you want to render the menu on y
 `$items` - Array of root level menu items visible to the current user
 `$user` - Current user
 `$icon_prefix` - Prefix to use for the items' icons
+`$id` - The CSS ID of the menu
 
 The following methods will be available for the menu items:
 ```php

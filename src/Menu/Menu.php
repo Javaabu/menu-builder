@@ -8,6 +8,8 @@ use Javaabu\MenuBuilder\MenuBuilder;
 
 abstract class Menu
 {
+    protected string $id = '';
+
     protected string $icon_prefix = '';
 
     protected string $default_framework = '';
@@ -22,6 +24,11 @@ abstract class Menu
     public function getIconPrefix(): ?string
     {
         return $this->icon_prefix;
+    }
+
+    public function getId(): ?string
+    {
+        return $this->id;
     }
 
     public function getCurrentUser(): ?Authorizable
@@ -52,6 +59,13 @@ abstract class Menu
         return $this;
     }
 
+    public function id(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function links(string $view = ''): string
     {
         if (! $view) {
@@ -69,6 +83,7 @@ abstract class Menu
             'items' => $this->getVisibleMenuItems($user),
             'user' => $user,
             'icon_prefix' => $this->getIconPrefix(),
+            'id' => $this->getId(),
         ];
     }
 

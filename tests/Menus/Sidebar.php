@@ -8,6 +8,7 @@ use Javaabu\MenuBuilder\Menu\MenuItem;
 class Sidebar extends Menu
 {
     protected string $icon_prefix = 'zmdi zmdi-';
+    protected string $id = 'side-bar';
 
     public function menuItems(): array
     {

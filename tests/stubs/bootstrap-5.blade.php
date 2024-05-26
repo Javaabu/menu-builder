@@ -1,4 +1,4 @@
-<ul class="nav flex-column">
+<ul class="nav flex-column" id="side-bar">
     <li class="nav-item">
         <a href="http://localhost" class="nav-link d-flex justify-content-between align-items-center active">
             <span><i class="zmdi zmdi-view-quilt"></i> Dashboard</span>
