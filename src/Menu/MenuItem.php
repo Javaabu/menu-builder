@@ -78,6 +78,10 @@ class MenuItem
 
     public function canView(?Authorizable $user = null): bool
     {
+        if($this->getLink() === '') {
+            return $this->hasVisibleChild($user);
+        }
+        
         return $this->hasAnyPermission($user) && $this->userCanViewWithCan($user);
     }
 }
