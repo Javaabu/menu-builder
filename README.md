@@ -84,6 +84,8 @@ You may use the following methods to further configure the menu item:
 - `icon` - sets the icon of the menu item
 - `count` - sets the notification count of the menu item. The method can accept an int, closure or even an eloquent `Builder` instance. You can specify the permissions required to show the count using the 2nd argument of this method.
 - `children` - sets the children of the menu item. Note that the default views support only 2 levels of items. If you want more levels or infinite levels, you can supply your own view when rendering the menu.
+- `hideIfNoChildrenVisible` - hides the menu item if it has children but doesn't have any visible children. By default, this option is active for items with blank links.
+- `dontHideIfNoChildrenVisible` - don't hide the menu item even if it has no visible children
 
 ### Displaying a Menu
 

@@ -10,6 +10,32 @@ trait CanHaveChildren
     protected array $children = [];
     protected ?array $visible_children;
 
+    protected ?bool $hide_if_no_children_visible = null;
+
+
+    public function hideIfNoChildrenVisible(): self
+    {
+        $this->hide_if_no_children_visible = true;
+
+        return $this;
+    }
+
+    public function dontHideIfNoChildrenVisible(): self
+    {
+        $this->hide_if_no_children_visible = true;
+
+        return $this;
+    }
+
+    public function shouldHideIfNoChildrenVisible(): bool
+    {
+        if (is_null($this->hide_if_no_children_visible)) {
+            return empty($this->getUrl());
+        }
+
+        return $this->hide_if_no_children_visible;
+    }
+
     public function children(array $children): self
     {
         $this->visible_children = null;

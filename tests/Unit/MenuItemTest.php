@@ -353,4 +353,148 @@ class MenuItemTest extends TestCase
         $this->assertFalse($other_main_item->hasActiveChild());
         $this->assertEquals(1, $other_main_item->getAggregatedCount($user));
     }
+
+    /** @test */
+    public function it_hides_the_main_link_by_default_on_blank_links_if_no_children_are_visible(): void
+    {
+        Gate::define('view_users', function (User $user) {
+            return $user->name == 'John';
+        });
+
+        Gate::define('edit_users', function (User $user) {
+            return $user->name != 'John';
+        });
+
+        $children = [
+            MenuItem::make('Child 1')->count(1, 'view_users')->permissions('view_users'),
+            MenuItem::make('Child 2')->count(2, 'edit_users')->permissions('edit_users'),
+            MenuItem::make('Child 3')->active(true),
+        ];
+
+        $other_children = [
+            MenuItem::make('Child 1')->count(1, 'edit_users')->permissions('edit_users'),
+            MenuItem::make('Child 2')->count(2, 'edit_users')->permissions('edit_users'),
+        ];
+
+        $main_item = MenuItem::make('Main Item')
+            ->count(1)
+            ->children($children);
+
+        $other_main_item = MenuItem::make('Main Item')
+            ->count(1)
+            ->children($other_children);
+
+        /** @var User $user */
+        $user = User::factory() ->create(['name' => 'John']);
+
+        $this->assertTrue($main_item->canView($user));
+        $this->assertTrue($main_item->hasChildren());
+        $this->assertEquals($children, $main_item->getChildren());
+        $this->assertTrue($main_item->hasVisibleChild($user));
+        $this->assertTrue($main_item->hasActiveChild());
+        $this->assertEquals(2, $main_item->getAggregatedCount($user));
+
+        $this->assertFalse($other_main_item->canView($user));
+        $this->assertTrue($other_main_item->hasChildren());
+        $this->assertFalse($other_main_item->hasVisibleChild($user));
+        $this->assertFalse($other_main_item->hasActiveChild());
+        $this->assertEquals(1, $other_main_item->getAggregatedCount($user));
+    }
+
+    /** @test */
+    public function it_does_not_hide_the_main_link_by_default_on_non_blank_links_if_no_children_are_visible(): void
+    {
+        Gate::define('view_users', function (User $user) {
+            return $user->name == 'John';
+        });
+
+        Gate::define('edit_users', function (User $user) {
+            return $user->name != 'John';
+        });
+
+        $children = [
+            MenuItem::make('Child 1')->count(1, 'view_users')->permissions('view_users'),
+            MenuItem::make('Child 2')->count(2, 'edit_users')->permissions('edit_users'),
+            MenuItem::make('Child 3')->active(true),
+        ];
+
+        $other_children = [
+            MenuItem::make('Child 1')->count(1, 'edit_users')->permissions('edit_users'),
+            MenuItem::make('Child 2')->count(2, 'edit_users')->permissions('edit_users'),
+        ];
+
+        $main_item = MenuItem::make('Main Item')
+            ->count(1)
+            ->children($children);
+
+        $other_main_item = MenuItem::make('Main Item')
+            ->url('https://google.com')
+            ->count(1)
+            ->children($other_children);
+
+        /** @var User $user */
+        $user = User::factory() ->create(['name' => 'John']);
+
+        $this->assertTrue($main_item->canView($user));
+        $this->assertTrue($main_item->hasChildren());
+        $this->assertEquals($children, $main_item->getChildren());
+        $this->assertTrue($main_item->hasVisibleChild($user));
+        $this->assertTrue($main_item->hasActiveChild());
+        $this->assertEquals(2, $main_item->getAggregatedCount($user));
+
+        $this->assertTrue($other_main_item->canView($user));
+        $this->assertTrue($other_main_item->hasChildren());
+        $this->assertFalse($other_main_item->hasVisibleChild($user));
+        $this->assertFalse($other_main_item->hasActiveChild());
+        $this->assertEquals(1, $other_main_item->getAggregatedCount($user));
+    }
+
+    /** @test */
+    public function it_does_hide_the_main_link_on_non_blank_links_if_no_children_are_visible_when_specified(): void
+    {
+        Gate::define('view_users', function (User $user) {
+            return $user->name == 'John';
+        });
+
+        Gate::define('edit_users', function (User $user) {
+            return $user->name != 'John';
+        });
+
+        $children = [
+            MenuItem::make('Child 1')->count(1, 'view_users')->permissions('view_users'),
+            MenuItem::make('Child 2')->count(2, 'edit_users')->permissions('edit_users'),
+            MenuItem::make('Child 3')->active(true),
+        ];
+
+        $other_children = [
+            MenuItem::make('Child 1')->count(1, 'edit_users')->permissions('edit_users'),
+            MenuItem::make('Child 2')->count(2, 'edit_users')->permissions('edit_users'),
+        ];
+
+        $main_item = MenuItem::make('Main Item')
+            ->count(1)
+            ->children($children);
+
+        $other_main_item = MenuItem::make('Main Item')
+            ->url('https://google.com')
+            ->hideIfNoChildrenVisible()
+            ->count(1)
+            ->children($other_children);
+
+        /** @var User $user */
+        $user = User::factory() ->create(['name' => 'John']);
+
+        $this->assertTrue($main_item->canView($user));
+        $this->assertTrue($main_item->hasChildren());
+        $this->assertEquals($children, $main_item->getChildren());
+        $this->assertTrue($main_item->hasVisibleChild($user));
+        $this->assertTrue($main_item->hasActiveChild());
+        $this->assertEquals(2, $main_item->getAggregatedCount($user));
+
+        $this->assertFalse($other_main_item->canView($user));
+        $this->assertTrue($other_main_item->hasChildren());
+        $this->assertFalse($other_main_item->hasVisibleChild($user));
+        $this->assertFalse($other_main_item->hasActiveChild());
+        $this->assertEquals(1, $other_main_item->getAggregatedCount($user));
+    }
 }
