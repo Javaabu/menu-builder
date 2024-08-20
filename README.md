@@ -2,7 +2,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/javaabu/menu-builder.svg?style=flat-square)](https://packagist.org/packages/javaabu/menu-builder)
 [![Test Status](../../actions/workflows/run-tests.yml/badge.svg)](../../actions/workflows/run-tests.yml)
-[![Quality Score](https://img.shields.io/scrutinizer/g/javaabu/menu-builder.svg?style=flat-square)](https://scrutinizer-ci.com/g/javaabu/menu-builder)
+![Code Coverage Badge](./.github/coverage.svg)
 [![Total Downloads](https://img.shields.io/packagist/dt/javaabu/menu-builder.svg?style=flat-square)](https://packagist.org/packages/javaabu/menu-builder)
 
 This Laravel package makes it breeze to set up and render menus for different parts of your application. The Menu Builder class is highly configurable, allowing you to define the structure and behavior of your menus in a flexible and maintainable way.
