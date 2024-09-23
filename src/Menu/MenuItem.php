@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable;
 use Illuminate\Support\Traits\Macroable;
 use Javaabu\MenuBuilder\Traits\CanActivate;
 use Javaabu\MenuBuilder\Traits\CanHaveChildren;
+use Javaabu\MenuBuilder\Traits\HasBadge;
 use Javaabu\MenuBuilder\Traits\HasCan;
 use Javaabu\MenuBuilder\Traits\HasController;
 use Javaabu\MenuBuilder\Traits\HasCount;
@@ -27,6 +28,7 @@ class MenuItem
     use HasPermission;
     use HasCan;
     use HasCount;
+    use HasBadge;
     use CanHaveChildren;
     use Macroable;
 

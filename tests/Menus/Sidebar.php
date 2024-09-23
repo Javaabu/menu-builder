@@ -26,7 +26,8 @@ class Sidebar extends Menu
 
                     MenuItem::make('Categories')
                         ->permissions('view_categories')
-                        ->url('http://localhost/categories'),
+                        ->url('http://localhost/categories')
+                        ->badge(__('New')),
 
                     MenuItem::make('Brands')
                         ->url('http://localhost/brands')
@@ -40,6 +41,11 @@ class Sidebar extends Menu
                         ->permissions('view_returns')
                         ->url('http://localhost/return-values'),
                 ]),
+
+            MenuItem::make('Returns')
+                ->url('http://localhost/returns')
+                ->icon('assignment-return')
+                ->badge(__('Error'), 'text-bg-danger'),
         ];
     }
 }

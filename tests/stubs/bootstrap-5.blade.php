@@ -19,6 +19,7 @@
             <li class="nav-item">
                 <a href="http://localhost/categories" class="nav-link d-flex justify-content-between align-items-center">
                     <span>Categories</span>
+                    <span class="ms-2 badge text-bg-primary rounded-pill">New</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -31,6 +32,12 @@
     <li class="nav-item">
         <a href="http://localhost/returns" class="nav-link d-flex justify-content-between align-items-center">
             <span><i class="zmdi zmdi-assignment-return"></i> Returns</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="http://localhost/returns" class="nav-link d-flex justify-content-between align-items-center">
+            <span><i class="zmdi zmdi-assignment-return"></i> Returns</span>
+            <span class="ms-2 badge text-bg-danger rounded-pill">Error</span>
         </a>
     </li>
 </ul>

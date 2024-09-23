@@ -24,6 +24,22 @@ class MenuItemTest extends TestCase
     }
 
     /** @test */
+    public function it_can_set_the_menu_item_badge(): void
+    {
+        $menu_item = MenuItem::make('Dashboard')->badge('new');
+
+        $this->assertEquals('new', $menu_item->getBadge());
+    }
+
+    /** @test */
+    public function it_can_set_the_menu_item_badge_class(): void
+    {
+        $menu_item = MenuItem::make('Dashboard')->badge('new', 'primary');
+
+        $this->assertEquals('primary', $menu_item->getBadgeClass());
+    }
+
+    /** @test */
     public function it_can_set_the_menu_item_label(): void
     {
         $menu_item = MenuItem::make('Dashboard');

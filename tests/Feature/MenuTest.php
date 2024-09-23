@@ -76,6 +76,18 @@ class MenuTest extends TestCase
 
         $actual_content = $this->response->getContent();
 
-        $this->assertXmlStringEqualsXmlString($this->loadTestStub('material-admin-26.blade.php'), $actual_content);
+        $expected_content = $this->loadTestStub('material-admin-26.blade.php');
+
+        // remove extra whitespace
+        $expected_content = preg_replace('/\s+/', ' ', $expected_content);
+        $expected_content = str_replace("\n", '', $expected_content);
+
+        // remove extra whitespace
+        $actual_content = preg_replace('/\s+/', ' ', $actual_content);
+        $actual_content = str_replace("\n", '', $actual_content);
+        $actual_content = str_replace(' <', '<', $actual_content);
+        $actual_content = trim($actual_content);
+
+        $this->assertXmlStringEqualsXmlString($expected_content, $actual_content);
     }
 }

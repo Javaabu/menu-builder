@@ -9,6 +9,10 @@
         @if($count = $item->getAggregatedCount($user))
         <span class="ms-2 badge text-bg-primary rounded-pill">{{ $count }}</span>
         @endif
+        @if($bage = $item->getBadge())
+            @php $badge_class = $item->getBadgeClass() @endphp
+            <span class="ms-2 badge {{ $badge_class ?: 'text-bg-primary' }} rounded-pill">{{ $bage }}</span>
+        @endif
     </a>
     @if($children = $item->getVisibleChildren($user))
     <ul>

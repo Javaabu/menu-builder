@@ -14,6 +14,7 @@
             <li>
                 <a href="http://localhost/categories" class="d-flex justify-content-between align-items-center">
                     <span>Categories</span>
+                    <span class="badge badge-pill align-self-start bg-primary">New</span>
                 </a>
             </li>
             <li>
@@ -25,5 +26,8 @@
     </li>
     <li>
         <a href="http://localhost/returns"><i class="zmdi zmdi-assignment-return"></i> Returns</a>
+    </li>
+    <li>
+        <a href="http://localhost/returns"><i class="zmdi zmdi-assignment-return"></i> Returns<span class="ml-2 badge badge-pill text-bg-danger">Error</span></a>
     </li>
 </ul>
