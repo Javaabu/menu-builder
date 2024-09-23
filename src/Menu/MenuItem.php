@@ -13,11 +13,13 @@ use Javaabu\MenuBuilder\Traits\HasCount;
 use Javaabu\MenuBuilder\Traits\HasIcon;
 use Javaabu\MenuBuilder\Traits\HasPermission;
 use Javaabu\MenuBuilder\Traits\HasRoute;
+use Javaabu\MenuBuilder\Traits\HasRoutePatterns;
 use Javaabu\MenuBuilder\Traits\HasUrl;
 
 class MenuItem
 {
     use HasRoute;
+    use HasRoutePatterns;
     use HasController;
     use HasUrl;
     use CanActivate;

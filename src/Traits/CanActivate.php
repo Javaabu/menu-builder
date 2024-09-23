@@ -19,6 +19,8 @@ trait CanActivate
     {
         if (isset($this->active)) {
             return $this->evaluate($this->active, ['request' => request()]);
+        } elseif ($this->hasRoutePatterns()) {
+            return $this->checkActiveFromRoutePatterns();
         } elseif ($this->hasUrl()) {
             return $this->checkActiveFromUrl();
         } elseif ($this->hasRoute()) {

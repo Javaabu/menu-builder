@@ -71,8 +71,9 @@ You may use any of the following methods to set the link of the menu item. The l
 - `controller` - sets the link using the `index` action of the given controller. The active state would be true if the current controller is the given controller.
 - `url` - sets the link directly using a string. The active state would be true if the current full url matches the given url.
 
-When the link is set using any of the above methods, the active state will be determined automatically. If you want to customize the active state logic, you can use the following method:
+When the link is set using any of the above methods, the active state will be determined automatically. If you want to customize the active state logic, you can use the following methods:
 - `active` - sets the condition to check if the menu item is active. Accepts a boolean or a closure.
+- `routePattern` - sets the condition to check if the menu item is active using route patterns. Accepts a string or array of strings or multiple route patterns as separate arguments. If both the `active` option and `routePattern` is used, `active` will take precedence.
 
 You may use any of the following methods to set the conditions to determine whether to show the item to the current user:
 - `permissions` - This defines a permission or an array of permissions that the user must have to see the menu item. Any of the permissions is sufficient to view the menu item.

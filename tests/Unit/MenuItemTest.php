@@ -71,6 +71,57 @@ class MenuItemTest extends TestCase
     }
 
     /** @test */
+    public function it_can_determine_active_state_from_string_route_pattern(): void
+    {
+        $this->withoutExceptionHandling();
+
+        $inactive_item = MenuItem::make('Home')->route('web.home')->routePattern('web.settings');
+        $active_item = MenuItem::make('Settings')->route('web.settings')->routePattern('web.*');
+
+        Route::get('/settings')->name('web.settings');
+        Route::view('/home', 'active-link', compact('active_item', 'inactive_item'))->name('web.home');
+
+        $this->visit('/home')
+            ->seeElement('a[href="http://localhost/home"]')
+            ->dontSeeElement('a[href="http://localhost/home"].active')
+            ->seeElement('a[href="http://localhost/settings"].active');
+    }
+
+    /** @test */
+    public function it_can_determine_active_state_from_multi_route_pattern(): void
+    {
+        $this->withoutExceptionHandling();
+
+        $inactive_item = MenuItem::make('Home')->route('web.home')->routePattern('web.settings');
+        $active_item = MenuItem::make('Settings')->route('web.settings')->routePattern('web.*', 'web.home');
+
+        Route::get('/settings')->name('web.settings');
+        Route::view('/home', 'active-link', compact('active_item', 'inactive_item'))->name('web.home');
+
+        $this->visit('/home')
+            ->seeElement('a[href="http://localhost/home"]')
+            ->dontSeeElement('a[href="http://localhost/home"].active')
+            ->seeElement('a[href="http://localhost/settings"].active');
+    }
+
+    /** @test */
+    public function it_can_determine_active_state_from_array_route_pattern(): void
+    {
+        $this->withoutExceptionHandling();
+
+        $inactive_item = MenuItem::make('Home')->route('web.home')->routePattern(['web.settings']);
+        $active_item = MenuItem::make('Settings')->route('web.settings')->routePattern(['web.*', 'web.home']);
+
+        Route::get('/settings')->name('web.settings');
+        Route::view('/home', 'active-link', compact('active_item', 'inactive_item'))->name('web.home');
+
+        $this->visit('/home')
+            ->seeElement('a[href="http://localhost/home"]')
+            ->dontSeeElement('a[href="http://localhost/home"].active')
+            ->seeElement('a[href="http://localhost/settings"].active');
+    }
+
+    /** @test */
     public function it_can_determine_active_state_from_route_with_parameters(): void
     {
         $user_1 = User::factory()->create();
