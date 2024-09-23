@@ -134,11 +134,18 @@ public function boot(): void
 
 ### Customizing the rendered menu
 
-The `links` method will accept your own view if you want to render the menu on your own. The view will receive the following date:
-`$items` - Array of root level menu items visible to the current user
-`$user` - Current user
-`$icon_prefix` - Prefix to use for the items' icons
-`$id` - The CSS ID of the menu
+The `links` method will accept your own view if you want to render the menu on your own.
+
+```php
+// render using custom view
+{!! $sidebar->links('web.menus.sidebar') !!}
+```
+
+The view will receive the following date:
+- `$items` - Array of root level menu items visible to the current user
+- `$user` - Current user
+- `$icon_prefix` - Prefix to use for the items' icons
+- `$id` - The CSS ID of the menu
 
 The following methods will be available for the menu items:
 ```php
