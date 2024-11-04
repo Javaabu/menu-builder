@@ -2,13 +2,15 @@
     @php
         $hasActiveChild = $item->hasActiveChild($user);
         $active = $item->isActive() || $hasActiveChild;
+        $css_class = $item->getCssClass();
     @endphp
-    @if($active || $item->hasVisibleChild($user))
+    @if($active || $item->hasVisibleChild($user) || $css_class)
         @class([
             'navigation__active' => $active && (! $hasActiveChild),
             'navigation__sub' => $item->hasVisibleChild($user),
             'navigation__sub--toggled' => $hasActiveChild,
             'navigation__sub--active' => $hasActiveChild,
+            $css_class => ! empty($css_class),
         ])
     @endif
     >

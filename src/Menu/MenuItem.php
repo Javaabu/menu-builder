@@ -11,6 +11,7 @@ use Javaabu\MenuBuilder\Traits\HasBadge;
 use Javaabu\MenuBuilder\Traits\HasCan;
 use Javaabu\MenuBuilder\Traits\HasController;
 use Javaabu\MenuBuilder\Traits\HasCount;
+use Javaabu\MenuBuilder\Traits\HasCssClass;
 use Javaabu\MenuBuilder\Traits\HasIcon;
 use Javaabu\MenuBuilder\Traits\HasPermission;
 use Javaabu\MenuBuilder\Traits\HasRoute;
@@ -29,6 +30,7 @@ class MenuItem
     use HasCan;
     use HasCount;
     use HasBadge;
+    use HasCssClass;
     use CanHaveChildren;
     use Macroable;
 

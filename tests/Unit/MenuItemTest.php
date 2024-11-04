@@ -24,6 +24,14 @@ class MenuItemTest extends TestCase
     }
 
     /** @test */
+    public function it_can_set_the_menu_item_class(): void
+    {
+        $menu_item = MenuItem::make('Dashboard')->cssClass('new');
+
+        $this->assertEquals('new', $menu_item->getCssClass());
+    }
+
+    /** @test */
     public function it_can_set_the_menu_item_badge(): void
     {
         $menu_item = MenuItem::make('Dashboard')->badge('new');
@@ -362,7 +370,7 @@ class MenuItemTest extends TestCase
         });
 
         /** @var User $user */
-        $user = User::factory() ->create(['name' => 'John']);
+        $user = User::factory()->create(['name' => 'John']);
         $other_user = User::factory() ->create(['name' => 'Doe']);
 
         $this->assertTrue(MenuItem::make('Users')->count(12)->shouldShowCount());

@@ -1,4 +1,4 @@
-<li class="nav-item">
+<li class="nav-item{{ $item->hasCssClass() ? ' ' . $item->getCssClass() : '' }}">
     <a href="{{ $item->getLink() }}"
        @class([
             'nav-link d-flex justify-content-between align-items-center',

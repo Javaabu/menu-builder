@@ -14,6 +14,7 @@ class Sidebar extends Menu
     {
         return [
             MenuItem::make('Dashboard')
+                ->cssClass('custom-class')
                 ->route('home')
                 ->icon('view-quilt'),
 

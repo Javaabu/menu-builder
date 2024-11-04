@@ -40,9 +40,10 @@ class AdminSidebar extends Menu implements IsMenu
     public function menuItems(): array
     {
         return [
-            MenuItem::make(__('Dashboard'))
+            MenuItem::make(__('Dashboard'))                 
                     ->route('admin.home')
-                    ->icon('zmdi-view-quilt'),
+                    ->icon('zmdi-view-quilt')
+                    ->cssClass('custom-css-class'),
                     
             MenuItem::make(__('Users'))
                 ->controller(\App\Http\Controllers\Admin\UsersController::class)
@@ -83,6 +84,7 @@ You may use any of the following methods to set the conditions to determine whet
 If you call both `permissions` and `can`, then the conditions defined in both methods should be met to show the item
 
 You may use the following methods to further configure the menu item:
+- `cssClass` - sets a custom css class for the menu item.
 - `badge` - adds an optional badge text to the menu item. can also pass a badge class.
 - `icon` - sets the icon of the menu item
 - `count` - sets the notification count of the menu item. The method can accept an int, closure or even an eloquent `Builder` instance. You can specify the permissions required to show the count using the 2nd argument of this method.
@@ -157,10 +159,11 @@ $item->isActive() // checks if the item is currently active
 $item->hasActiveChild($user) // checks if the item has any visible child that is currently active
 $item->hasIcon() // checks if the item has an icon defined
 $item->getIcon($icon_prefix) // returns the item's icon with the prefix prepended
+$item->hasCssClass() // checks if the items has a custom css class set
+$item->getCssClass() // returns the custom css class, if any set for the item
 $item->getAggregatedCount($user) // get the count of the item + the count of all visible child items, will return 0 if the current user can't see the count
 $item->getVisibleCount($user) // get the count of the item, will return 0 if the current user can't see the count
 $item->getVisibleChildren($user) // returns an array of all visible child items
-
 ```
 
 If you want to customize the default views, you can publish the package views and customize them. To publish the view files to `resources/views/vendor/menu-builder`, run:

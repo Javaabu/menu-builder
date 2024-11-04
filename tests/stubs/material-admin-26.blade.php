@@ -1,5 +1,5 @@
 <ul class="navigation" id="side-bar">
-    <li class="navigation__active">
+    <li class="navigation__active custom-class">
         <a href="http://localhost"><i class="zmdi zmdi-view-quilt"></i> Dashboard</a>
     </li>
     <li class="navigation__sub">

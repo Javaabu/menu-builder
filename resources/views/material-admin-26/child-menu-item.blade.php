@@ -1,4 +1,15 @@
-<li @if($item->isActive())class="navigation__active"@endif>
+<li
+    @php
+        $active = $item->isActive();
+        $css_class = $item->getCssClass();
+    @endphp
+    @if($active || $css_class)
+        @class([
+            'navigation__active' => $active,
+            $css_class => ! empty($css_class),
+        ])
+    @endif
+>
     <a href="{{ $item->getLink() }}" class="d-flex justify-content-between align-items-center">
         <span>{{ $item->getLabel() }}</span>
         @if($count = $item->getVisibleCount($user))
