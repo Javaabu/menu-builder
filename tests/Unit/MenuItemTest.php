@@ -4,6 +4,7 @@ namespace Javaabu\MenuBuilder\Tests\Unit;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Javaabu\MenuBuilder\Tests\Controllers\HomeController;
 use Javaabu\MenuBuilder\Tests\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 use Javaabu\MenuBuilder\Tests\InteractsWithDatabase;
@@ -172,6 +173,42 @@ class MenuItemTest extends TestCase
 
         $this->assertEquals(UsersController::class, $menu_item->getController());
         $this->assertEquals('http://localhost/users', $menu_item->getLink());
+    }
+
+    /** @test */
+    public function it_can_set_menu_item_from_controller_with_params(): void
+    {
+        Route::get('/users/{user}', [UsersController::class, 'show']);
+
+        $user = User::factory()->create();
+
+        $menu_item = MenuItem::make('Users')
+            ->controller(UsersController::class, compact('user'), 'show');
+
+        $this->assertEquals(UsersController::class, $menu_item->getController());
+        $this->assertEquals('http://localhost/users/1', $menu_item->getLink());
+
+        $this->visit($menu_item->getLink())
+            ->seeText("User: {$user->name}");
+    }
+
+    /** @test */
+    public function it_can_set_menu_item_for_index_method_from_controller_with_params(): void
+    {
+        Route::get('/{locale}/users', [HomeController::class, 'index']);
+
+        $menu_item = MenuItem::make('Users')
+            ->controller(
+                HomeController::class,
+                ['locale' => 'jp'],
+                'index'
+            );
+
+        $this->assertEquals(HomeController::class, $menu_item->getController());
+        $this->assertEquals('http://localhost/jp/users', $menu_item->getLink());
+
+        $this->visit($menu_item->getLink())
+            ->seeText("Locale: jp");
     }
 
     /** @test */

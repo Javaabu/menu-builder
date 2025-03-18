@@ -2,17 +2,19 @@
 
 namespace Javaabu\MenuBuilder\Traits;
 
-use Illuminate\Database\Eloquent\Model;
-
 trait HasController
 {
     protected ?string $controller = null;
+    protected string $controller_method = 'index';
+    protected array $controller_params = [];
 
-    public function controller(string $controller): self
+    public function controller(string $controller, array $params = [], ?string $controller_method = 'index'): self
     {
         $this->clearLink();
 
         $this->controller = $controller;
+        $this->controller_method = $controller_method;
+        $this->controller_params = $params;
 
         return $this;
     }
@@ -24,7 +26,7 @@ trait HasController
 
     public function hasController(): bool
     {
-        return ! empty($this->getController());
+        return !empty($this->getController());
     }
 
     protected function checkActiveFromController(): bool
@@ -46,11 +48,16 @@ trait HasController
 
     protected function generateControllerLink(): string
     {
-        return action([$this->getController(), $this->getControllerMethod()]);
+        return action([$this->getController(), $this->getControllerMethod()], $this->getControllerParams());
+    }
+
+    public function getControllerParams(): array
+    {
+        return $this->controller_params;
     }
 
     protected function getControllerMethod(): string
     {
-        return 'index';
+        return $this->controller_method;
     }
 }
