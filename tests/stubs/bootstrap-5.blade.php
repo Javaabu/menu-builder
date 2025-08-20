@@ -35,7 +35,7 @@
         </a>
     </li>
     <li class="nav-item">
-        <a href="http://localhost/returns" class="nav-link d-flex justify-content-between align-items-center">
+        <a href="http://localhost/returns" target="_blank" class="nav-link d-flex justify-content-between align-items-center">
             <span><i class="zmdi zmdi-assignment-return"></i> Returns</span>
             <span class="ms-2 badge text-bg-danger rounded-pill">Error</span>
         </a>

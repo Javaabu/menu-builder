@@ -1,5 +1,8 @@
 <li class="nav-item{{ $item->hasCssClass() ? ' ' . $item->getCssClass() : '' }}">
     <a href="{{ $item->getLink() }}"
+       @if($item->hasTarget())
+           target="{{ $item->getTarget() }}"
+       @endif
        @class([
             'nav-link d-flex justify-content-between align-items-center',
             'active' => $item->isActive()

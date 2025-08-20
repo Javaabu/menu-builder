@@ -28,6 +28,6 @@
         <a href="http://localhost/returns"><i class="zmdi zmdi-assignment-return"></i> Returns</a>
     </li>
     <li>
-        <a href="http://localhost/returns"><i class="zmdi zmdi-assignment-return"></i> Returns<span class="ml-2 badge badge-pill text-bg-danger">Error</span></a>
+        <a href="http://localhost/returns" target="_blank"><i class="zmdi zmdi-assignment-return"></i> Returns<span class="ml-2 badge badge-pill text-bg-danger">Error</span></a>
     </li>
 </ul>

@@ -33,6 +33,14 @@ class MenuItemTest extends TestCase
     }
 
     /** @test */
+    public function it_can_set_the_menu_item_target(): void
+    {
+        $menu_item = MenuItem::make('Dashboard')->target('_blank');
+
+        $this->assertEquals('_blank', $menu_item->getTarget());
+    }
+
+    /** @test */
     public function it_can_set_the_menu_item_badge(): void
     {
         $menu_item = MenuItem::make('Dashboard')->badge('new');

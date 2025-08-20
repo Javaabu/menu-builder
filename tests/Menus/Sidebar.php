@@ -45,6 +45,7 @@ class Sidebar extends Menu
 
             MenuItem::make('Returns')
                 ->url('http://localhost/returns')
+                ->target('_blank')
                 ->icon('assignment-return')
                 ->badge(__('Error'), 'text-bg-danger'),
         ];

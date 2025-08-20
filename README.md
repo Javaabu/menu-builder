@@ -58,6 +58,10 @@ class AdminSidebar extends Menu implements IsMenu
                     return $request->query('foo') == 'bars';
                 })
                 ->badge(__('New'), 'text-bg-primary'),
+                
+            MenuItem::make(__('External Link'))
+                ->url('https://google.com')
+                ->target('_blank'),                    
         ];
     }
 }
@@ -91,6 +95,7 @@ You may use the following methods to further configure the menu item:
 - `children` - sets the children of the menu item. Note that the default views support only 2 levels of items. If you want more levels or infinite levels, you can supply your own view when rendering the menu.
 - `hideIfNoChildrenVisible` - hides the menu item if it has children but doesn't have any visible children. By default, this option is active for items with blank links.
 - `dontHideIfNoChildrenVisible` - don't hide the menu item even if it has no visible children
+- `target` - sets the `href` target of the menu item
 
 ### Displaying a Menu
 
@@ -164,6 +169,8 @@ $item->getCssClass() // returns the custom css class, if any set for the item
 $item->getAggregatedCount($user) // get the count of the item + the count of all visible child items, will return 0 if the current user can't see the count
 $item->getVisibleCount($user) // get the count of the item, will return 0 if the current user can't see the count
 $item->getVisibleChildren($user) // returns an array of all visible child items
+$item->hasTarget() // checks if the item has a href target value defined
+$item->getTarget() // returns the item's href target attribute value
 ```
 
 If you want to customize the default views, you can publish the package views and customize them. To publish the view files to `resources/views/vendor/menu-builder`, run:

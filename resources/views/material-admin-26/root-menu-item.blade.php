@@ -14,7 +14,11 @@
         ])
     @endif
     >
-    <a href="{{ $item->getLink() }}">
+    <a href="{{ $item->getLink() }}"
+        @if($item->hasTarget())
+            target="{{ $item->getTarget() }}"
+        @endif
+    >
         @if($item->hasIcon())<i class="{{ $item->getIcon($icon_prefix) }}"></i> @endif{{ $item->getLabel() }}
         @if($count = $item->getAggregatedCount($user))
             <span class="ml-2 badge badge-pill">{{ $count }}</span>
