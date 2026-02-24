@@ -24,48 +24,42 @@ class MenuItemTest extends TestCase
         $this->runMigrations();
     }
 
-    /** @test */
-    public function it_can_set_the_menu_item_class(): void
+    public function test_it_can_set_the_menu_item_class(): void
     {
         $menu_item = MenuItem::make('Dashboard')->cssClass('new');
 
         $this->assertEquals('new', $menu_item->getCssClass());
     }
 
-    /** @test */
-    public function it_can_set_the_menu_item_target(): void
+    public function test_it_can_set_the_menu_item_target(): void
     {
         $menu_item = MenuItem::make('Dashboard')->target('_blank');
 
         $this->assertEquals('_blank', $menu_item->getTarget());
     }
 
-    /** @test */
-    public function it_can_set_the_menu_item_badge(): void
+    public function test_it_can_set_the_menu_item_badge(): void
     {
         $menu_item = MenuItem::make('Dashboard')->badge('new');
 
         $this->assertEquals('new', $menu_item->getBadge());
     }
 
-    /** @test */
-    public function it_can_set_the_menu_item_badge_class(): void
+    public function test_it_can_set_the_menu_item_badge_class(): void
     {
         $menu_item = MenuItem::make('Dashboard')->badge('new', 'primary');
 
         $this->assertEquals('primary', $menu_item->getBadgeClass());
     }
 
-    /** @test */
-    public function it_can_set_the_menu_item_label(): void
+    public function test_it_can_set_the_menu_item_label(): void
     {
         $menu_item = MenuItem::make('Dashboard');
 
         $this->assertEquals('Dashboard', $menu_item->getLabel());
     }
 
-    /** @test */
-    public function it_can_set_the_menu_item_route(): void
+    public function test_it_can_set_the_menu_item_route(): void
     {
         Route::get('/home')->name('web.home');
 
@@ -76,8 +70,7 @@ class MenuItemTest extends TestCase
         $this->assertEquals('http://localhost/home', $menu_item->getLink());
     }
 
-    /** @test */
-    public function it_can_set_the_menu_item_route_with_a_parameter(): void
+    public function test_it_can_set_the_menu_item_route_with_a_parameter(): void
     {
         Route::get('/users/{id}')->name('users.show');
 
@@ -88,8 +81,7 @@ class MenuItemTest extends TestCase
         $this->assertEquals('http://localhost/users/1', $menu_item->getLink());
     }
 
-    /** @test */
-    public function it_can_determine_active_state_from_route(): void
+    public function test_it_can_determine_active_state_from_route(): void
     {
         $active_item = MenuItem::make('Home')->route('web.home');
         $inactive_item = MenuItem::make('Settings')->route('web.settings');
@@ -103,8 +95,7 @@ class MenuItemTest extends TestCase
             ->dontSeeElement('a[href="http://localhost/settings"].active');
     }
 
-    /** @test */
-    public function it_can_determine_active_state_from_string_route_pattern(): void
+    public function test_it_can_determine_active_state_from_string_route_pattern(): void
     {
         $this->withoutExceptionHandling();
 
@@ -120,8 +111,7 @@ class MenuItemTest extends TestCase
             ->seeElement('a[href="http://localhost/settings"].active');
     }
 
-    /** @test */
-    public function it_can_determine_active_state_from_multi_route_pattern(): void
+    public function test_it_can_determine_active_state_from_multi_route_pattern(): void
     {
         $this->withoutExceptionHandling();
 
@@ -137,8 +127,7 @@ class MenuItemTest extends TestCase
             ->seeElement('a[href="http://localhost/settings"].active');
     }
 
-    /** @test */
-    public function it_can_determine_active_state_from_array_route_pattern(): void
+    public function test_it_can_determine_active_state_from_array_route_pattern(): void
     {
         $this->withoutExceptionHandling();
 
@@ -154,8 +143,7 @@ class MenuItemTest extends TestCase
             ->seeElement('a[href="http://localhost/settings"].active');
     }
 
-    /** @test */
-    public function it_can_determine_active_state_from_route_with_parameters(): void
+    public function test_it_can_determine_active_state_from_route_with_parameters(): void
     {
         $user_1 = User::factory()->create();
         $user_2 = User::factory()->create();
@@ -171,8 +159,7 @@ class MenuItemTest extends TestCase
             ->dontSeeElement('a[href="http://localhost/users/2/edit"].active');
     }
 
-    /** @test */
-    public function it_can_set_the_menu_item_controller(): void
+    public function test_it_can_set_the_menu_item_controller(): void
     {
         Route::get('/users', [UsersController::class, 'index']);
 
@@ -183,8 +170,7 @@ class MenuItemTest extends TestCase
         $this->assertEquals('http://localhost/users', $menu_item->getLink());
     }
 
-    /** @test */
-    public function it_can_set_menu_item_from_controller_with_params(): void
+    public function test_it_can_set_menu_item_from_controller_with_params(): void
     {
         Route::get('/users/{user}', [UsersController::class, 'show']);
 
@@ -200,8 +186,7 @@ class MenuItemTest extends TestCase
             ->seeText("User: {$user->name}");
     }
 
-    /** @test */
-    public function it_can_set_menu_item_for_index_method_from_controller_with_params(): void
+    public function test_it_can_set_menu_item_for_index_method_from_controller_with_params(): void
     {
         Route::get('/{locale}/users', [HomeController::class, 'index']);
 
@@ -219,8 +204,7 @@ class MenuItemTest extends TestCase
             ->seeText("Locale: jp");
     }
 
-    /** @test */
-    public function it_can_determine_active_state_from_controller(): void
+    public function test_it_can_determine_active_state_from_controller(): void
     {
         Route::get('/home')->name('web.home');
         Route::get('/users', [UsersController::class, 'index']);
@@ -231,8 +215,7 @@ class MenuItemTest extends TestCase
             ->dontSeeElement('a[href="http://localhost/home"].active');
     }
 
-    /** @test */
-    public function it_can_set_the_menu_item_url(): void
+    public function test_it_can_set_the_menu_item_url(): void
     {
         Route::get('/home')->name('web.home');
 
@@ -243,8 +226,7 @@ class MenuItemTest extends TestCase
         $this->assertEquals('http://localhost/home', $menu_item->getLink());
     }
 
-    /** @test */
-    public function it_can_determine_active_state_from_url(): void
+    public function test_it_can_determine_active_state_from_url(): void
     {
         Route::get('/settings')->name('web.settings');
 
@@ -259,8 +241,7 @@ class MenuItemTest extends TestCase
             ->dontSeeElement('a[href="http://localhost/settings"].active');
     }
 
-    /** @test */
-    public function it_can_determine_active_state_from_url_with_parameters(): void
+    public function test_it_can_determine_active_state_from_url_with_parameters(): void
     {
         $active_item = MenuItem::make('Home')->url('http://localhost/home?foo=bar');
         $inactive_item = MenuItem::make('Home 2')->url('http://localhost/home');
@@ -273,8 +254,7 @@ class MenuItemTest extends TestCase
             ->dontSeeElement('a[href="http://localhost/home"].active');
     }
 
-    /** @test */
-    public function it_uses_the_last_set_method_to_generate_the_link(): void
+    public function test_it_uses_the_last_set_method_to_generate_the_link(): void
     {
         Route::get('/users', [UsersController::class, 'index']);
         Route::get('/settings')->name('web.settings');
@@ -287,8 +267,7 @@ class MenuItemTest extends TestCase
         $this->assertEquals('http://localhost/settings', $menu_item->getLink());
     }
 
-    /** @test */
-    public function it_can_determine_active_state_from_active_closure(): void
+    public function test_it_can_determine_active_state_from_active_closure(): void
     {
         $active_item = MenuItem::make('Home')
                         ->url('http://localhost/home?foo=bar')
@@ -306,24 +285,21 @@ class MenuItemTest extends TestCase
             ->dontSeeElement('a[href="http://localhost/home?foo=baz"].active');
     }
 
-    /** @test */
-    public function it_can_set_the_menu_item_icon(): void
+    public function test_it_can_set_the_menu_item_icon(): void
     {
         $menu_item = MenuItem::make('Dashboard')->icon('book');
 
         $this->assertEquals('zmdi zmdi-book', $menu_item->getIcon('zmdi zmdi-'));
     }
 
-    /** @test */
-    public function it_can_set_the_menu_item_permissions(): void
+    public function test_it_can_set_the_menu_item_permissions(): void
     {
         $this->assertEquals(['view_users'], MenuItem::make('Users')->permissions('view_users')->getPermissions());
         $this->assertEquals(['view_users', 'edit_users'], MenuItem::make('Users')->permissions('view_users', 'edit_users')->getPermissions());
         $this->assertEquals(['view_users', 'edit_users'], MenuItem::make('Users')->permissions(['view_users', 'edit_users'])->getPermissions());
     }
 
-    /** @test */
-    public function it_can_determine_if_a_user_can_view_the_menu_item_using_permissions(): void
+    public function test_it_can_determine_if_a_user_can_view_the_menu_item_using_permissions(): void
     {
         Gate::define('view_users', function (User $user) {
             return $user->name == 'John';
@@ -349,8 +325,7 @@ class MenuItemTest extends TestCase
         $this->assertFalse(MenuItem::make('Users')->permissions('edit_users')->canView($user));
     }
 
-    /** @test */
-    public function it_can_determine_if_a_user_can_view_the_menu_item_using_can(): void
+    public function test_it_can_determine_if_a_user_can_view_the_menu_item_using_can(): void
     {
         Gate::policy(User::class, UserPolicy::class);
 
@@ -371,8 +346,7 @@ class MenuItemTest extends TestCase
         $this->assertFalse(MenuItem::make('Users')->can(function ($user) { return $user->name != 'John';})->canView($user));
     }
 
-    /** @test */
-    public function it_can_determine_if_a_user_can_view_the_menu_item_using_both_can_and_permssions(): void
+    public function test_it_can_determine_if_a_user_can_view_the_menu_item_using_both_can_and_permssions(): void
     {
         Gate::policy(User::class, UserPolicy::class);
 
@@ -391,8 +365,7 @@ class MenuItemTest extends TestCase
         $this->assertTrue(MenuItem::make('Users')->can('viewAny', User::class)->permissions('view_users')->canView($user));
     }
 
-    /** @test */
-    public function it_can_set_the_menu_item_count(): void
+    public function test_it_can_set_the_menu_item_count(): void
     {
         /** @var User $user */
         $user = User::factory() ->create(['name' => 'John']);
@@ -403,8 +376,7 @@ class MenuItemTest extends TestCase
         $this->assertEquals(3, MenuItem::make('Users')->count(function ($user) { return 1 + 2;})->getCount());
     }
 
-    /** @test */
-    public function it_can_determine_whether_to_show_the_menu_item_count(): void
+    public function test_it_can_determine_whether_to_show_the_menu_item_count(): void
     {
         Gate::define('view_users', function (User $user) {
             return $user->name == 'John';
@@ -429,8 +401,7 @@ class MenuItemTest extends TestCase
         $this->assertFalse(MenuItem::make('Users')->count(function ($user) { return 1 + 2;}, function ($user) { return $user->name != 'John';})->shouldShowCount($user));
     }
 
-    /** @test */
-    public function it_can_set_the_menu_item_children(): void
+    public function test_it_can_set_the_menu_item_children(): void
     {
         Gate::define('view_users', function (User $user) {
             return $user->name == 'John';
@@ -474,8 +445,7 @@ class MenuItemTest extends TestCase
         $this->assertEquals(1, $other_main_item->getAggregatedCount($user));
     }
 
-    /** @test */
-    public function it_hides_the_main_link_by_default_on_blank_links_if_no_children_are_visible(): void
+    public function test_it_hides_the_main_link_by_default_on_blank_links_if_no_children_are_visible(): void
     {
         Gate::define('view_users', function (User $user) {
             return $user->name == 'John';
@@ -521,8 +491,7 @@ class MenuItemTest extends TestCase
         $this->assertEquals(1, $other_main_item->getAggregatedCount($user));
     }
 
-    /** @test */
-    public function it_does_not_hide_the_main_link_by_default_on_non_blank_links_if_no_children_are_visible(): void
+    public function test_it_does_not_hide_the_main_link_by_default_on_non_blank_links_if_no_children_are_visible(): void
     {
         Gate::define('view_users', function (User $user) {
             return $user->name == 'John';
@@ -569,8 +538,7 @@ class MenuItemTest extends TestCase
         $this->assertEquals(1, $other_main_item->getAggregatedCount($user));
     }
 
-    /** @test */
-    public function it_does_hide_the_main_link_on_non_blank_links_if_no_children_are_visible_when_specified(): void
+    public function test_it_does_hide_the_main_link_on_non_blank_links_if_no_children_are_visible_when_specified(): void
     {
         Gate::define('view_users', function (User $user) {
             return $user->name == 'John';

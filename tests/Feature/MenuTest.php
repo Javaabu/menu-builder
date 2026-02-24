@@ -39,8 +39,7 @@ class MenuTest extends TestCase
         });
     }
 
-    /** @test */
-    public function it_can_render_a_bootstrap_5_menu(): void
+    public function test_it_can_render_a_bootstrap_5_menu(): void
     {
         $this->setupTestRoutes();
         $this->setupTestPermissions();
@@ -59,8 +58,7 @@ class MenuTest extends TestCase
         $this->assertXmlStringEqualsXmlString($this->loadTestStub('bootstrap-5.blade.php'), $actual_content);
     }
 
-    /** @test */
-    public function it_can_render_a_material_admin_26_menu(): void
+    public function test_it_can_render_a_material_admin_26_menu(): void
     {
         $this->setupTestRoutes();
         $this->setupTestPermissions();
