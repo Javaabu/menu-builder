@@ -16,6 +16,7 @@ composer require javaabu/menu-builder
 
 ## Usage
 
+
 ### Defining a Menu
 
 Each menu is defined by a class that extends `Javaabu\MenuBuilder\Menu\Menu`.
