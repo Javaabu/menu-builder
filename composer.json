@@ -48,7 +48,8 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/Javaabu/testbench-browser-kit.git"
+            "url": "https://github.com/Javaabu/testbench-browser-kit.git",
+            "canonical": false
         }
     ],
     "minimum-stability": "dev",
