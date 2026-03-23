@@ -19,7 +19,7 @@
         "illuminate/support": "^9.0 || ^10.0 || ^11.0 || ^12.0 || ^13.0"
     },
     "require-dev": {
-        "orchestra/testbench-browser-kit": "^7.0 || ^8.0 || ^9.0 || ^10.0",
+        "orchestra/testbench-browser-kit": "^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0",
         "phpunit/phpunit": "^9.5 || ^10.5 || ^11.5.3 || ^12.5.8 || ^13.0.3"
     },
     "autoload": {
@@ -45,13 +45,6 @@
             ]
         }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/Javaabu/testbench-browser-kit.git",
-            "canonical": false
-        }
-    ],
     "minimum-stability": "dev",
     "prefer-stable": true
 }
